@@ -119,7 +119,7 @@ jobs:
       - *decode_android_key
       - run:
           name: Upload APK to Slack Channel
-          command: bundle exec fastlane slack_apk_build
+          command: bundle exec fastlane slack_apk_debug_build #slack_apk_build
 
   firebase_app_distribution:
     <<: *android_config

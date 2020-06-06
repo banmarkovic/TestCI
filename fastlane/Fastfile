@@ -34,6 +34,16 @@ platform :android do
     gradle(task: "clean assembleDebug")
   end
 
+  desc "Build debug APK & deploy to slack"
+  lane :slack_apk_debug_build do
+    gradle(
+      task: "assemble",
+      build_type: "Debug"
+    )
+    upload_to_slack()
+    slack(message: ":rocket: *Build Successful!* :rocket:")
+  end
+
   desc "Build a signed release APK & deploy to slack"
   lane :slack_apk_build do
     gradle(
@@ -41,7 +51,7 @@ platform :android do
       build_type: "Release",
       print_command: false,
       properties: {
-        "android.injected.signing.store.file" => "/keystore.jks",
+        "android.injected.signing.store.file" => "keystore.jks",
         "android.injected.signing.store.password" => ENV['STORE_PASSWORD'],
         "android.injected.signing.key.alias" => ENV['KEY_ALIAS'],
         "android.injected.signing.key.password" => ENV['KEY_PASSWORD'],
@@ -56,7 +66,7 @@ platform :android do
     file_path = lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]
     file_name = file_path.gsub(/\/.*\//,"")
     access_token = ENV["ACCESS_TOKEN"]
-    channel_name = "apks"
+    channel_name = "test-ci"
 
     sh "echo Uploading " + file_name + " to Slack"
     sh "curl https://slack.com/api/files.upload -F token=\"" + access_token + "\" -F channels=\"" + channel_name + "\" -F title=\"" + file_name + "\" -F filename=\"" + file_name + "\" -F file=@" + file_path
