@@ -74,17 +74,14 @@ references:
   decode_gservices_key: &decode_gservices_key
     run:
       name: Decode Google Services JSON key
-      command: |
-        echo $GOOGLE_SERVICES_JSON
-         | base64 -d | tee app/google-services.json app/src/mock/google-services.json app/src/prod/google-services.json >/dev/null
+      command: echo $GOOGLE_SERVICES_JSON | base64 -d | tee app/google-services.json app/src/mock/google-services.json app/src/prod/google-services.json >/dev/null
   # ---------------------------------------------------------------------------------------------------------------------
   # INSTALL THE FIREBASE CLI FILE & ENABLE THE GLOBALLY AVAILABLE firebase COMMAND
   # ---------------------------------------------------------------------------------------------------------------------
   firebase_cli_install: &firebase_cli_install
     run:
       name: Install the Firebase CLI
-      command: |
-        curl -sL firebase.tools | bash
+      command: curl -sL firebase.tools | bash
 jobs:
 
   ## Run unit tests
