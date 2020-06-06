@@ -38,6 +38,7 @@ platform :android do
   lane :slack_apk_debug_build do
     gradle(
       task: "assemble",
+      flavor: "prod",
       build_type: "Debug"
     )
     upload_to_slack()
@@ -99,7 +100,7 @@ platform :android do
       build_android_app(
         task: "assemble",
         flavor: "prod",
-        build_type: "release"
+        build_type: "Debug"
       )
 
       firebase_app_distribution(
